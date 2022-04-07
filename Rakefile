@@ -7,7 +7,7 @@ require 'pry'
 # task "run" do
 #   # $LOAD_PATH.unshift(File.dirname(__FILE__), "lib")
 #   binding.pry
-#   list = OrderParser.price_list
+#   list = PostParser.price_list
 #
 #
 #   # load the data files into strings for you
@@ -27,7 +27,7 @@ require 'pry'
 namespace :services do
   desc "Calculate bundle price"
   $LOAD_PATH.unshift(File.dirname(__FILE__), "lib")
-  require 'order_parser'
+  require 'post_parser'
   task :calc_bundle_price, [:items] => :environment do |t, args|
 
 
