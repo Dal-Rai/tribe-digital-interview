@@ -16,3 +16,17 @@ _ii. Using Rails Console_
 
 > PostService.new("10 IMG 15 FLAC 13 VID").print_result
 
+
+**How to Add a new format**
+
+Search for bundle_price.yml
+
+Add a new submission format
+
+Eg:
+
+PDF:
+  - 4: 670
+    6: 1000
+    10: 1630
+
