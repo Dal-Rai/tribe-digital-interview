@@ -1,18 +1,18 @@
 class OrderParser
 
   attr_accessor(
-    :order,
+    :items,
   )
 
-  def initialize(order)
-    @order = order
+  def initialize(items)
+    @items = items
   end
 
-  def item_types
-    order.split.select { |i| i[0] =~ /^[a-zA-Z]/ }
+  def post_types
+    items.split.select { |i| i[0] =~ /^[a-zA-Z]/ }
   end
 
-  def split_order
-    order.scan(/(\d+\ \w+)/).flatten
+  def split_post
+    items.scan(/(\d+\ \w+)/).flatten
   end
 end
