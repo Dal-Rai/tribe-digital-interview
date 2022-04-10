@@ -1,7 +1,6 @@
 class OrderParser
-
   attr_accessor(
-    :items,
+    :items
   )
 
   def initialize(items)

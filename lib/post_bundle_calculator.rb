@@ -2,7 +2,7 @@ class PostBundleCalculator
   attr_accessor(
     :items,
     :item_types,
-    :item_bundle_prices,
+    :item_bundle_prices
   )
 
   def initialize(items, item_types)
@@ -18,15 +18,17 @@ class PostBundleCalculator
       temp = []
       result = []
       bundles = item_bundles[type].sort
-      item = items.find{ |e| e.include?(type) }
+      item = items.find { |e| e.include?(type) }
       sum = item.to_i
       find_bundles(bundles, sum, 0, result, temp)
 
-      memo[type] = if result.empty?
-        fallback_price(type, item, sum)
-      else
-        format_item(type, item, result)
-      end
+      memo[type] =
+        if result.empty?
+          fallback_price(type, item, sum)
+        else
+          format_item(type, item, result)
+        end
+
       item_bundle_prices.merge!(memo)
     end
 
@@ -34,14 +36,14 @@ class PostBundleCalculator
   end
 
   def find_bundles(bundles, sum, i, result, temp)
-    if (sum == 0)
+    if sum.zero?
       result << temp.dup
     else
-      (i...bundles.count).map do |i|
-        if ((sum - bundles[i]) >= 0)
-          temp << bundles[i]
-          find_bundles(bundles, sum - bundles[i], i, result, temp)
-          temp.delete_at(temp.index(bundles[i]))
+      (i...bundles.count).map do |j|
+        if ((sum - bundles[j]) >= 0)
+          temp << bundles[j]
+          find_bundles(bundles, sum - bundles[j], j, result, temp)
+          temp.delete_at(temp.index(bundles[j]))
         end
       end
     end
@@ -53,13 +55,13 @@ class PostBundleCalculator
     {
       item: item,
       total: total,
-      sub_items: [],
+      sub_items: []
     }
   end
 
   def item_bundles
     item_types.each_with_object({}) do |type, memo|
-      memo[type] = BUNDLE_PRICE[type].map { |x| x.keys }.flatten
+      memo[type] = BUNDLE_PRICE[type].map(&:keys).flatten
     end
   end
 

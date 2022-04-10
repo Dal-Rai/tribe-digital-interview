@@ -20,13 +20,13 @@ class PostService
 
   def print_result
     if item_prices.empty?
-      puts sprintf(FormatValidator.allowed_format_msg)
+      puts format(FormatValidator.allowed_format_msg)
     else
-      item_prices.each do |_key, value|
+      item_prices.each_value do |value|
         puts("#{value[:item]} $#{round(value[:total])}")
 
         value[:sub_items].each do |item|
-          puts sprintf("%-7s%i%-1s%i%s%s", "", item[:count], " x ", item[:bundle], " $", round(item[:total]))
+          puts format('%<space>-7s%<count>i%<x_sign>-1s%<bundle>i%<dollar>s%<total>s', space: '', count: item[:count], x_sign: ' x ', bundle: item[:bundle], dollar: ' $', total: round(item[:total]))
         end
       end
     end
@@ -43,6 +43,6 @@ class PostService
   end
 
   def round(value)
-    value.is_a?(Integer) ? value : "%.2f"% value
+    value.is_a?(Integer) ? value : '%.2f'% value
   end
 end
