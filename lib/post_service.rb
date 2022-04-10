@@ -5,6 +5,7 @@ class PostService
     :calculator,
     :item_types,
     :order_parser,
+    :item_prices
   )
 
   def initialize(order)
@@ -13,24 +14,36 @@ class PostService
     @items = order_parser.split_order
   end
 
+  def item_prices
+    @item_prices ||=  calculator.perform
+  end
+
   def print_result
-    if calculator.valid_order?
-      calculator.perform.each do |_key, value|
-        puts(value[:item])
+    if item_prices.empty?
+      puts sprintf(FormatValidator.allowed_format_msg)
+    else
+      item_prices.each do |_key, value|
+        total = round(value[:sub_items].pluck(:total).sum)
+        puts("#{value[:item]} $#{total}")
+
         value[:sub_items].each do |item|
-          puts("       " + item)
+          puts sprintf("%-7s%i%-1s%i%s%s", "", item[:count], " x ", item[:bundle], " $", round(item[:total]))
         end
       end
-    else
-      puts FormatValidator.allowed_format_msg
     end
   end
+
+  private
 
   def calculator
     @calculator ||= PostBundleCalculator.new(items, item_types)
   end
 
   def order_parser
-    @order_parser ||= OrderParser.new(order)
+    @order_parser ||= OrderParser.new(@order)
+  end
+
+  def round(value)
+    value.is_a?(Integer) ? value : "%.2f"% value
   end
 end

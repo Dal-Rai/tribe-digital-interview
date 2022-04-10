@@ -4,12 +4,8 @@ class FormatValidator
       BUNDLE_PRICE.keys
     end
 
-    def invalid_formats(item_types)
-      item_types.select { |item| allowed_format.exclude?(item) }
-    end
-
     def valid_format?(item_types)
-      invalid_formats(item_types).none?
+      item_types.select { |item| allowed_format.exclude?(item) }.none?
     end
 
     def allowed_format_msg

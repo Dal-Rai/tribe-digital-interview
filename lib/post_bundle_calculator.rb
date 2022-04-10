@@ -12,7 +12,7 @@ class PostBundleCalculator
   end
 
   def perform
-    return unless valid_order?
+    return [] unless valid_order?
 
     item_types.each_with_object({}) do |type, memo|
       temp = []
@@ -22,7 +22,11 @@ class PostBundleCalculator
       sum = item.to_i
       find_bundles(bundles, sum, 0, result, temp)
 
-      memo[type] = result.empty? ? fallback_price(type, item, sum) : format_item(type, item, result)
+      memo[type] = if result.empty?
+        fallback_price(type, item, sum)
+      else
+        format_item(type, item, result)
+      end
       item_bundle_prices.merge!(memo)
     end
 
@@ -60,18 +64,19 @@ class PostBundleCalculator
   end
 
   def format_item(type, item, result)
-    ans = []
+    temp = {}
 
     bundle_prices = BUNDLE_PRICE[type][0]
-    result.each do |bundles|
-      sort_bundles = bundles.sort.reverse
-      ans << format_sub_item(sort_bundles, item, bundle_prices)
-    end
+    sub_items = result.map { |x| format_sub_item(x.sort.reverse, bundle_prices) }
+    cheapest_sub_items = sub_items.sort_by { |comb| comb.sum { |ele| ele[:total] } }.first
 
-    ans.sort_by{ |x| x[:total] }.first
+    temp.merge(
+      item: item,
+      sub_items: cheapest_sub_items
+    )
   end
 
-  def format_sub_item(bundles, item, bundle_prices)
+  def format_sub_item(bundles, bundle_prices)
     temp = []
     total = 0
     group_bundles = bundles.group_by(&:itself).transform_values(&:count)
@@ -79,18 +84,16 @@ class PostBundleCalculator
     group_bundles.each do |key, value|
       price = bundle_prices[key] * value
       total += price
-      temp << "#{value} X #{key} $#{price}"
+
+      temp <<
+        {
+          count: value,
+          bundle: key,
+          total: (bundle_prices[key] * value).round(2)
+        }
     end
 
-    hash_sub_item(item, total, temp)
-  end
-
-  def hash_sub_item(item, total, temp)
-    {
-      item: "#{item} $#{total}",
-      total: total,
-      sub_items: temp,
-    }
+    temp
   end
 
   def valid_order?

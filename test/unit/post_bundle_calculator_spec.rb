@@ -7,9 +7,9 @@ RSpec.describe PostBundleCalculator do
   let(:items) { parser.split_order }
   let(:subject) { described_class.new(items, item_types) }
 
-  context 'When supplied posts as a string' do
-    it 'returns post type with bundles' do
-      expect(subject.item_bundles).to eq(media_bundles)
+  context 'When supplied order as a string' do
+    it 'returns item type with bundles' do
+      expect(subject.item_bundles).to eq(item_bundles)
     end
   end
 
@@ -23,10 +23,9 @@ RSpec.describe PostBundleCalculator do
 
   context "When combination sum of bundles doesn't match the total" do
     it 'returns price by computing fallback price' do
-      type = BUNDLE_PRICE.keys.first
-      total, sum = BUNDLE_PRICE[type][0].first
-      item = "5 #{type}"
-      expect(subject.fallback_price(type, item, 5)[:total]).to eql(5 * sum/total)
+      bundle, price = first_item_bundle_price
+      item = "5 #{first_item_type}"
+      expect(subject.fallback_price(first_item_type, item, 5)[:total]).to eql(5 * price/bundle)
     end
   end
 end
