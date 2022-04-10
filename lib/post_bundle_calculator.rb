@@ -51,7 +51,7 @@ class PostBundleCalculator
     number, amount = BUNDLE_PRICE[type][0].first
     total = sum * amount / number
     {
-      item: "#{item} $#{total}",
+      item: item,
       total: total,
       sub_items: [],
     }
@@ -72,6 +72,7 @@ class PostBundleCalculator
 
     temp.merge(
       item: item,
+      total: cheapest_sub_items.pluck(:total).sum,
       sub_items: cheapest_sub_items
     )
   end

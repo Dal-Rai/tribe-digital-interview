@@ -23,8 +23,7 @@ class PostService
       puts sprintf(FormatValidator.allowed_format_msg)
     else
       item_prices.each do |_key, value|
-        total = round(value[:sub_items].pluck(:total).sum)
-        puts("#{value[:item]} $#{total}")
+        puts("#{value[:item]} $#{round(value[:total])}")
 
         value[:sub_items].each do |item|
           puts sprintf("%-7s%i%-1s%i%s%s", "", item[:count], " x ", item[:bundle], " $", round(item[:total]))

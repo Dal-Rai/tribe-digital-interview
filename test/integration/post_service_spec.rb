@@ -11,6 +11,7 @@ RSpec.describe PostService do
       sub_items = order_item[:sub_items]
       expect(valid_post.item_prices.count).to eq(item_types.count)
       expect(sub_items.pluck(:bundle).sum).to eq(order_item[:item].to_i)
+      expect(order_item[:total]).to eq(sub_items.pluck(:total).sum)
       expect(valid_post.print_result[first_item_type][:sub_items].count).to be > 0
     end
   end

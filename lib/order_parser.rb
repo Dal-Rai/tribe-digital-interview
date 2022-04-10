@@ -8,11 +8,11 @@ class OrderParser
     @items = items
   end
 
-  def post_types
+  def item_types
     items.split.select { |i| i[0] =~ /^[a-zA-Z]/ }
   end
 
-  def split_post
+  def split_order
     items.scan(/(\d+\ \w+)/).flatten
   end
 end
