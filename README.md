@@ -26,7 +26,10 @@ Add a new submission format
 Eg:
 
 PDF:
+
   - 4: 670
+  
     6: 1000
+    
     10: 1630
 
