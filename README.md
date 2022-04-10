@@ -1,13 +1,13 @@
 # README
 
-**Clone project **
+##Clone project
 
 > git clone https://github.com/Dal-Rai/tribe-digital-interview.git
 
 > _bundle install_
 
 
-**How to run** 
+##How to run
 
 _i. Using Rake_
 
@@ -19,19 +19,19 @@ _ii. Using Rails Console_
 > PostService.new("10 IMG 15 FLAC 13 VID").print_result
 
 
-**How to Add a new format**
+##How to Add a new format
 
 Search for bundle_price.yml
 
 Add a new submission format
 
-Eg:
+###Eg:
 
 PDF:
 
-  - 4: 670
+  `-` 4: 670
   
-    6: 1000
+     6: 1000
     
-    10: 1630
+     10: 1630
 
