@@ -1,24 +1,24 @@
 class PostService
   attr_accessor(
-    :parser,
-    :posts,
-    :post_types,
-    :post_bundle,
-    :bundler
+    :order,
+    :items,
+    :calculator,
+    :item_types,
+    :order_parser,
   )
 
-  def initialize(posts)
-    @posts = posts
-    @post_types = order_parser.post_types
-    @post_bundle = order_parser.split_post
+  def initialize(order)
+    @order = order
+    @item_types = order_parser.item_types
+    @items = order_parser.split_order
   end
 
   def print_result
-    if bundler.valid_post?
-      bundler.calc.each do |key, value|
-        puts sprintf(value[:post])
+    if calculator.valid_order?
+      calculator.perform.each do |_key, value|
+        puts(value[:item])
         value[:sub_items].each do |item|
-          puts sprintf("       " + item)
+          puts("       " + item)
         end
       end
     else
@@ -26,11 +26,11 @@ class PostService
     end
   end
 
-  def bundler
-    @bundler ||= PostBundleCalculator.new(@post_bundle, @post_types)
+  def calculator
+    @calculator ||= PostBundleCalculator.new(items, item_types)
   end
 
   def order_parser
-    @parser ||= PostParser.new(@posts)
+    @order_parser ||= OrderParser.new(order)
   end
 end

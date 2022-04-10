@@ -1,5 +1,5 @@
-require ''
-
-def data
-  @data ||= YAML.load_file(File.join(Rails.root, 'config', 'bundle_price.yml'))
+def media_bundles
+  item_types.each_with_object({}) do |type, memo|
+    memo[type] = BUNDLE_PRICE[type].map { |x| x.keys }.flatten
+  end
 end

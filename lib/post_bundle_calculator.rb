@@ -1,31 +1,32 @@
 class PostBundleCalculator
   attr_accessor(
-    :posts,
-    :post_bundle_price,
-    :post_types,
+    :items,
+    :item_types,
+    :item_bundle_prices,
   )
 
-  def initialize(posts, post_types)
-    @posts = posts
-    @post_types = post_types
-    @post_bundle_price = {}
+  def initialize(items, item_types)
+    @items = items
+    @item_types = item_types
+    @item_bundle_prices = {}
   end
 
-  def calc
-    return unless valid_post?
+  def perform
+    return unless valid_order?
 
-    @post_types.each_with_object({}) do |item, memo|
+    item_types.each_with_object({}) do |type, memo|
       temp = []
       result = []
-      bundles = post_bundles[item].sort
-      post = posts.find{ |e| e.include?(item) }
-      sum = post.to_i
+      bundles = item_bundles[type].sort
+      item = items.find{ |e| e.include?(type) }
+      sum = item.to_i
       find_bundles(bundles, sum, 0, result, temp)
-      memo[item] = format(item, post, result)
-      @post_bundle_price.merge!(memo)
+
+      memo[type] = result.empty? ? fallback_price(type, item, sum) : format_item(type, item, result)
+      item_bundle_prices.merge!(memo)
     end
 
-    @post_bundle_price
+    item_bundle_prices
   end
 
   def find_bundles(bundles, sum, i, result, temp)
@@ -42,47 +43,57 @@ class PostBundleCalculator
     end
   end
 
-  def post_bundles
-    @post_types.each_with_object({}) do |post, memo|
-      memo[post] = BUNDLE_PRICE[post].map { |x| x.keys }.flatten
+  def fallback_price(type, item, sum)
+    number, amount = BUNDLE_PRICE[type][0].first
+    total = sum * amount / number
+    {
+      item: "#{item} $#{total}",
+      total: total,
+      sub_items: [],
+    }
+  end
+
+  def item_bundles
+    item_types.each_with_object({}) do |type, memo|
+      memo[type] = BUNDLE_PRICE[type].map { |x| x.keys }.flatten
     end
   end
 
-  def format(item, post, result)
+  def format_item(type, item, result)
     ans = []
 
-    bundle_prices = BUNDLE_PRICE[item][0]
-    result.each do |items|
-      sort_items = items.sort.reverse
-      ans << format_item(sort_items, post, bundle_prices)
+    bundle_prices = BUNDLE_PRICE[type][0]
+    result.each do |bundles|
+      sort_bundles = bundles.sort.reverse
+      ans << format_sub_item(sort_bundles, item, bundle_prices)
     end
 
-    ans.sort_by{|x| x[:total]}.first
+    ans.sort_by{ |x| x[:total] }.first
   end
 
-  def format_item(items, post, bundle_prices)
+  def format_sub_item(bundles, item, bundle_prices)
     temp = []
     total = 0
-    group_items = items.group_by(&:itself).transform_values(&:count)
+    group_bundles = bundles.group_by(&:itself).transform_values(&:count)
 
-    group_items.each do |key, value|
+    group_bundles.each do |key, value|
       price = bundle_prices[key] * value
       total += price
       temp << "#{value} X #{key} $#{price}"
     end
 
-    format_order(post, total, temp)
+    hash_sub_item(item, total, temp)
   end
 
-  def format_order(post, total, temp)
+  def hash_sub_item(item, total, temp)
     {
-      post: "#{post} $#{total}",
+      item: "#{item} $#{total}",
       total: total,
       sub_items: temp,
     }
   end
 
-  def valid_post?
-    FormatValidator.valid_format?(@post_types)
+  def valid_order?
+    FormatValidator.valid_format?(item_types)
   end
 end

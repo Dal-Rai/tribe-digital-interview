@@ -4,16 +4,16 @@ class FormatValidator
       BUNDLE_PRICE.keys
     end
 
-    def invalid_formats(post_type)
-      post_type.select { |item| allowed_format.exclude?(item) }
+    def invalid_formats(item_types)
+      item_types.select { |item| allowed_format.exclude?(item) }
     end
 
-    def valid_format?(post_type)
-      invalid_formats(post_type).none?
+    def valid_format?(item_types)
+      invalid_formats(item_types).none?
     end
 
     def allowed_format_msg
-      "Allowed format are #{allowed_format}"
+      "Allowed formats are #{allowed_format.to_sentence}"
     end
   end
 end
