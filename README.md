@@ -1,5 +1,7 @@
 # README
+
 **Clone project **
+
 > git clone https://github.com/Dal-Rai/tribe-digital-interview.git
 
 > _bundle install_
