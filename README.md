@@ -1,24 +1,31 @@
 # README
+- Clone project 
+> git clone https://github.com/Dal-Rai/tribe-digital-interview.git
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+> _bundle install_
 
-Things you may want to cover:
 
-* Ruby version
+**How to run** 
 
-* System dependencies
+_i. Using Rake_
 
-* Configuration
+> bundle exec rake services:calc_bundle_price["10 IMG 15 FLAC 13 VID"]
 
-* Database creation
+_ii. Using Rails Console_
+> _rails c_
 
-* Database initialization
+> PostService.new("10 IMG 15 FLAC 13 VID").print_result
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+**How to Add a new format**
 
-* Deployment instructions
+Search for bundle_price.yml
 
-* ...
+Add a new submission format
+
+Eg:
+
+PDF:
+  - 4: 670
+    6: 1000
+    10: 1630
