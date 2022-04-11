@@ -1,6 +1,6 @@
 def item_bundles
   item_types.each_with_object({}) do |type, memo|
-    memo[type] = BUNDLE_PRICE[type].map { |x| x.keys }.flatten
+    memo[type] = BUNDLE_PRICE[type].map(&:keys).flatten
   end
 end
 
@@ -17,19 +17,19 @@ def first_item_bundle_price
 end
 
 def valid_order
-  order = ""
-  item_types.each  { |type| order += "#{item_bundles[type].sum} #{type} "}
+  order = ''
+  item_types.each { |type| order += "#{item_bundles[type].sum} #{type} " }
   order.strip
 end
 
 def invalid_type_order
-  order = ""
-  item_types.each  { |type| order += "#{item_bundles[type].sum} #{type.pluralize} "}
+  order = ''
+  item_types.each { |type| order += "#{item_bundles[type].sum} #{type.pluralize} " }
   order.strip
 end
 
 def no_combination_sum
-  order = ""
-  item_types.each  { |type| order += "#{item_bundles[type].sum + 1} #{type} "}
+  order = ''
+  item_types.each { |type| order += "#{item_bundles[type].sum + 1} #{type} " }
   order.strip
 end

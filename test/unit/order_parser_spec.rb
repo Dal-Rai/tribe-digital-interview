@@ -1,7 +1,7 @@
 require_relative '../rails_helper'
 
 RSpec.describe OrderParser do
-  let(:post) { "10 IMG 15 FLAC 13 VID" }
+  let(:post) { valid_order }
   let(:subject) { described_class.new(post) }
 
   context 'When supplied order as a string' do

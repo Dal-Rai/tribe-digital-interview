@@ -1,11 +1,10 @@
 require_relative '../rails_helper'
 
 RSpec.describe PostBundleCalculator do
-  let(:order) { "10 IMG 15 FLAC 13 VID" }
-  let(:parser) { OrderParser.new(order) }
-  let(:item_types) { parser.item_types }
+  let(:parser) { OrderParser.new(valid_order) }
+  let(:types) { parser.item_types }
   let(:items) { parser.split_order }
-  let(:subject) { described_class.new(items, item_types) }
+  let(:subject) { described_class.new(items, types) }
 
   context 'When supplied order as a string' do
     it 'returns item type with bundles' do
@@ -25,7 +24,7 @@ RSpec.describe PostBundleCalculator do
     it 'returns price by computing fallback price' do
       bundle, price = first_item_bundle_price
       item = "5 #{first_item_type}"
-      expect(subject.fallback_price(first_item_type, item, 5)[:total]).to eql(5 * price/bundle)
+      expect(subject.fallback_price(first_item_type, item, 5)[:total]).to eql(5 * price / bundle)
     end
   end
 end
