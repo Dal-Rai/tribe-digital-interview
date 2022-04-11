@@ -92,7 +92,7 @@ class PostBundleCalculator
         {
           count: value,
           bundle: key,
-          total: (bundle_prices[key] * value).round(2)
+          total: (bundle_prices[key] * value)
         }
     end
 
