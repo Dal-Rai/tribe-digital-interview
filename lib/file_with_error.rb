@@ -1,8 +1,12 @@
-class SecretHandler
-  # Hardcoded secret (this is bad practice)
-  API_KEY = "hardcoded-secret-api-key"
+class FileWithError
+  # Hardcoded credentials (known pattern)
+  AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
+  AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  DATABASE_PASSWORD = "super-secret-password"
 
-  def print_api_key
-    puts "The API key is: #{API_KEY}"
+  def print_secrets
+    puts "AWS Access Key ID: #{AWS_ACCESS_KEY_ID}"
+    puts "AWS Secret Access Key: #{AWS_SECRET_ACCESS_KEY}"
+    puts "Database Password: #{DATABASE_PASSWORD}"
   end
 end
