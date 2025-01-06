@@ -9,3 +9,6 @@ jobs:
         uses: snyk/actions/ruby@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with: 
+          command: monitor
+          args: --severity-threshold=high
