@@ -1,17 +1,20 @@
-class FileWithError
-  # Hardcoded credentials (known pattern)
-  AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
-  AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-  DATABASE_PASSWORD = "super-secret-password"
+require 'sinatra'
 
-  def print_secrets
-    puts "AWS Access Key ID: #{AWS_ACCESS_KEY_ID}"
-    puts "AWS Secret Access Key: #{AWS_SECRET_ACCESS_KEY}"
-    puts "Database Password: #{DATABASE_PASSWORD}"
+class FileWithError < Sinatra::Base
+  # Hardcoded secret (vulnerable)
+  SECRET_KEY = "super-secret-key"
+
+  # Unsafe user input usage (command injection)
+  get '/execute' do
+    user_input = params[:cmd]
+    result = `#{user_input}` # Vulnerable to command injection
+    "Command output: #{result}"
   end
 
-  def error_code
-    result = 100 / 0
-    puts result
+  # SQL Injection vulnerability
+  get '/user' do
+    user_id = params[:id]
+    result = ActiveRecord::Base.connection.execute("SELECT * FROM users WHERE id = '#{user_id}'")
+    "User info: #{result.to_a}"
   end
 end
