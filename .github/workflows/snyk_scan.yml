@@ -1,4 +1,4 @@
-name: Example workflow for Ruby using Snyk
+name: CI Publish, with security check using Snyk
 on: push
 jobs:
   security:

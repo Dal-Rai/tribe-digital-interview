@@ -9,4 +9,9 @@ class FileWithError
     puts "AWS Secret Access Key: #{AWS_SECRET_ACCESS_KEY}"
     puts "Database Password: #{DATABASE_PASSWORD}"
   end
+
+  def error_code
+    result = 100 / 0
+    puts result
+  end
 end
