@@ -1,4 +1,4 @@
-aname: Example workflow for Ruby using Snyk
+name: Example workflow for Ruby using Snyk
 on: push
 jobs:
   security:
