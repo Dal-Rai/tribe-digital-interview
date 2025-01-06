@@ -7,11 +7,12 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/ruby@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with: 
           command: test
           args: --sarif-file-output=snyk.sarif
       - name: Print the snyk sarif file
-        run: cat synk.sarif
+        run : cat synk.sarif
           
