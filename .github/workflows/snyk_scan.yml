@@ -14,5 +14,5 @@ jobs:
           command: test
           args: --sarif-file-output=snyk.sarif
       - name: Print the snyk sarif file
-        run : cat synk.sarif
+        run : cat snyk.sarif
           
